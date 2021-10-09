@@ -60,17 +60,17 @@ data Or a b = OrL a | OrR b
 
 
 
-dissyllo :: And (Or p q) (Not p) -> q
-dissyllo (And (OrL p) p_void) = absurd (p_void p) 
-dissyllo (And (OrR q) _) = q
+-- dissyllo :: And (Or p q) (Not p) -> q
+-- dissyllo (And (OrL p) p_void) = absurd (p_void p) 
+-- dissyllo (And (OrR q) _) = q
 
---skrive om
-dissyllo' :: Or p q -> Not p -> q
-dissyllo' (OrL p) p_void = absurd (p_void p) 
-dissyllo' (OrR q) _ = q
+-- --skrive om
+-- dissyllo' :: Or p q -> Not p -> q
+-- dissyllo' (OrL p) p_void = absurd (p_void p) 
+-- dissyllo' (OrR q) _ = q
 
-dissyllo'' :: And (Or p q) (Not p) -> q
-dissyllo'' = uncurry dissyllo'
+-- dissyllo'' :: And (Or p q) (Not p) -> q
+-- dissyllo'' = uncurry dissyllo'
 
 ```
 ---
@@ -212,7 +212,7 @@ A classical classical :) axiom is the law of excluded middle, which means that f
 `p or not p`.
 If we try to implement a proof of this, we fall short.
 
-```Haskell
+```haskell
 middle :: Or a (Not a)
 middle = ?
 ```
@@ -249,20 +249,6 @@ law4 (OrL af) (And a b) = af a
 law4 (OrR bf) (And a b) = bf b
 
 u = undefined
-
-l4 :: (((a -> b) -> c) -> a -> b) -> (b -> c) -> a -> b
-l4 ab2c_a_b bc a = ab2c_a_b ab_c a
-    where ab_c ab = bc (ab a) 
-
-l4' :: forall a b c . ((b -> c) -> a -> b) -> ((a -> b) -> c) -> a -> b
-l4' bc_a_b ab_c a = bc_a_b f a
-    where
-        f :: b -> c
-        f b = ab_c (const b)
-
-l4 :: (((a -> b) -> c) -> a -> b) -> (b -> c) -> a -> b
-
-l4' :: ((b -> c) -> a -> b) -> ((a -> b) -> c) -> a -> b
 
 ```
 ---
