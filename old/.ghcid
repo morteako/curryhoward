@@ -1,0 +1,3 @@
+--ignore-loaded
+--reload="."
+--test=":! cat notes.md | codedown haskell | runhaskell"
