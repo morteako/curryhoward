@@ -11,9 +11,10 @@ main = print "All tests passed"
 }}}
 math: mathjax
 marp: true
-<!-- paginate: true -->
+paginate: true 
 
 ---
+<!-- paginate: true -->
 
 # Bevis og programmering er sammme sak?
 
@@ -133,11 +134,125 @@ orImpliesAnd orAB = case orAB of
 
 ---
 
-# False og Not
+# False
+
+* En verdi av typen A beviser A
+* Vi skal ikke kunne bevise noe som ikke er sant
+* False (usant) må da være en type uten verdier
+* Er faktisk nyttig og inkludert i standardbiblioteker
+  * Kotlin : Nothing
+  * Rust : ! (never)
+  * Haskell : Void
+
+Haskell
+```haskell
+data False
+```
+Kotlin
+```kotlin
+class False private constructor()
+```
+
+---
+# False - absurd
+Fra noe usant kan man utlede hva som helst!
+
+Dette kan vi implementere/bevise 
+
+```haskell
+absurd :: False -> a
+absurd false = case false of {}
+```
+
+```kotlin
+fun <A> absurd(fals:False):A =
+    when(fals) {}
+```
 
 ---
 
-# Dobbel negasjon
+# Absurd : eksempel
+
+```haskell
+orFalse :: Or a False -> a
+orFalse or_a_False = case or_a_False of
+    OrLeft a -> a
+    OrRight false -> todo
+```
+
+---
+
+# Not - Negasjon
+Nå mangler vi bare Not , altså å negere et uttrykk
+* Sanne utsagn til usanne utsagn
+* Typer med verdier til typer uten verdier og motsatt 
+
+Et hendig logikktriks er da å implementere not ved hjelp av `False` og implikasjon
+```haskell
+type Not a = a -> False           --Haskell
+```
+
+```kotlin
+typealias Not<T> = (T) -> False   //Kotlin
+```
+* Ide: Hvis noe er usant, skal man da kunne utlede noe usant
+* Gir akkurat den oppførselen man får fra Not i logikk
+---
+
+# Not : eksempler
+
+```haskell
+explosion :: And a (Not a) -> False
+--        :: And a (a -> False) -> False
+explosion (And a notA) = todo
+
+```
+
+--- 
+# Not Not
+
+* Vi har lært at dobbelnegering gjør at man ender opp med samme
+    * Not (Not a) $\rightarrow$ a
+    * a $\rightarrow$ Not (Not a)
+
+* Hvis et utsagn er sant, så er det ikke sant at det utsagnet er usant (og motsatt)
+* "Hvis det ikke er tilfelle at vi ikke jobber i Bekk, så jobber vi i Bekk "
+
+```haskell
+impliesNotNot :: a -> Not (Not a)
+--            :: a -> (Not (a -> False)
+--            :: a -> ((a -> False) -> False)
+--            :: a -> (a -> False) -> False
+impliesNotNot a a2false = todo
+```
+
+
+---
+
+# Not Not - andre veien
+
+```haskell
+notnotImplies :: Not (Not a) -> a
+--            :: (Not (a -> False)) -> a
+--            :: ((a -> False) -> False) -> a
+notnotImplies a2false_false = todo
+```
+
+
+
+
+---
+
+
+# Not Not - andre veien
+
+* Hva går galt her?
+* Har alt vært forgjeves?
+* Henger det ikke på greip?
+* Burde jeg holdt foredrag om noe annet, som gir mer mening?
+  * Feks Spring og JavaBeans 
+* Eller kan vi redde oss inn? 
+
 
 ---
 
