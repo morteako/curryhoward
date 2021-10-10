@@ -256,9 +256,29 @@ notnotImplies a2false_false = todo
 
 ---
 
+# Logikk - klassisk
+
+* Det finnes flere logikksystemer
+* Den mest vanlig blir kalt "klassisk logikk"
+* Funker bra til ENDEL, men ikke til alt
+* Inkluderer
+  * Excluded middle :: Or a (Not a)
+  * Dobbelnegasjon (begge veier)
+  * Motsigelsesbevis
+    * Viser at det motsatte og viser til at det fører til usannhet, og derfor må det orginale være tilfelle
+    * Feks : bevise at $\sqrt{2}$ er et irrasjonelt tall ved å anta at det er et rasjonelt tall og vise at det fører til en kontradiksjon (noe usant)
+---
 # Konstruktiv logikk
-
-
+* Alle bevis demonstrerer eksistens
+  * Å bevise A er å demonstrere at A eksisterer
+  * Demonstrerer ved å gi et eksempel
+* En "svakere" logikk
+  * Alt som er sant i konstruktiv logikk er sant i klassisk, men ikke motsatt
+  * Så alt vi kan bevise med programmering er gyldige klassiske bevis også, men vi kan ikke bevise alt
+* Eksluderer:
+  * Excluded middle :: Or a (Not a) 
+  * Not (Not a) -> a 
+  * Motsigelsesbevis
 ---
 
 # DeMorgans
