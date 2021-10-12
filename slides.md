@@ -18,24 +18,21 @@ paginate: true
 
 # Bevis og programmering er sammme sak?
 
-
+* Advarsel: Uformelt (:
 ---
 
-# Utsagnslogikk
+# Hva skal vi se på?
 
-
+* Hvis et utsagn kan bevises i logikk, kan man implementere en verdi for den korresponderende typen 🤯
+* Hvis man kan implementere en verdi for en type, så kan det korresponderende utsagnet bevises i logikk 🤯🤯
 ---
+# Recap : Utsagnslogikk
 
-# Korrespondanse
+* Formler: $A$, $B$, osv
+* Verdier : $\top$, $\bot$
+* Operatorer : &, |, $\rightarrow$ , $\neg$
+* Bevis : naturlig deduksjon
 
-| Logikk      | Logikksyntaks     | Haskell | Kotlin |
-| ----------- | ----------------- | ------- | ------ |
-| A og B      | A & B             | ?       | ?      |
-| A eller B   | A \| B            | ?       | ?      |
-| Hvis A så B | A $\rightarrow$ B | ?       | ?      |
-| Sant        | $\top$            | ?       | ?      |
-| Usant       | $\bot$            | ?       | ?      |
-| Ikke A      | $\not$            | ?       | ?      |
 ---
 # Hva er et bevis?
 
@@ -47,8 +44,16 @@ paginate: true
 
 # True
 
+* En verdi av typen $A$ beviser $A$
+* `True` er noe som alltid skal være sant.
+  * Vi skal liksom kunne dra opp en `True` av hatten fra ingenting
+
 ```haskell
 data True = True
+```
+
+```kotlin
+object True
 ```
 
 ---
@@ -59,8 +64,8 @@ data True = True
 
 # And
 
-* Logikk : A & B betyr både A og B
-* Vi må da ha en datatype som har både en A og en B
+* Logikk : A & B betyr både $A$ og $B$
+* Vi må da ha en datatype som har både en $A$ og en $B$
 * Haskell : 
   
 ```haskell
@@ -94,8 +99,8 @@ aToAnd a = todo
 
 # Or
 
-* Logikk : A | B betyr enten A eller B
-* Vi må da ha en datatype som enten inneholder en A eller inneholder en B
+* Logikk : $A$ | $B$ betyr enten $A$ eller $B$
+* Vi må da ha en datatype som enten inneholder en $A$ eller inneholder en $B$
 * Haskell : 
   
 ```haskell
@@ -136,7 +141,7 @@ orImpliesAnd orAB = case orAB of
 
 # False
 
-* En verdi av typen A beviser A
+* En verdi av typen $A$ beviser $A$
 * Vi skal ikke kunne bevise noe som ikke er sant
 * False (usant) må da være en type uten verdier
 * Er faktisk nyttig og inkludert i standardbiblioteker
@@ -238,9 +243,6 @@ notnotImplies :: Not (Not a) -> a
 notnotImplies a2false_false = todo
 ```
 
-
-
-
 ---
 
 
@@ -276,8 +278,8 @@ notnotImplies a2false_false = todo
   * Alt som er sant i konstruktiv logikk er sant i klassisk, men ikke motsatt
   * Så alt vi kan bevise med programmering er gyldige klassiske bevis også, men vi kan ikke bevise alt
 * Eksluderer:
-  * Excluded middle :: Or a (Not a) 
-  * Not (Not a) -> a 
+  * Excluded middle : `Or a (Not a)` 
+  * `Not (Not a) -> a`
   * Motsigelsesbevis
 ---
 
