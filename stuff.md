@@ -13,5 +13,3 @@ teorem
 minimum:
     kode er bevis
     logikk <-> programmering
-
-    

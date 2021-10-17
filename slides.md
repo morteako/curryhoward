@@ -18,13 +18,18 @@ paginate: true
 
 # Bevis og programmering er sammme sak?
 
-* Advarsel: Uformelt (:
+* Advarsel 1: Uformelt (:
+* Advarsel 2: Litt dårlig tid :))
+* Advarsel 3: Gøy tema ((:(:
 ---
 
 # Hva skal vi se på?
 
 * Hvis et utsagn kan bevises i logikk, kan man implementere en verdi for den korresponderende typen 🤯
 * Hvis man kan implementere en verdi for en type, så kan det korresponderende utsagnet bevises i logikk 🤯🤯
+
+* Bruker Haskell 
+  * Gjelder for alle statisk typede språk med med algebraiske datatyper eller sealed classes (eller lignende)*
 ---
 # Recap : Utsagnslogikk
 
@@ -33,16 +38,75 @@ paginate: true
 * Operatorer : &, |, $\rightarrow$ , $\neg$
 * Bevis : naturlig deduksjon
 
+--- 
+# Rask intro til Haskellsyntaks
+
+* `::` - har typen
+* Typevariabler (Generics) har små bokstaver : feks `a`
+
+```haskell
+data MinDatatype a = Venstre a | Hoyre a
+
+isVenstre :: MinDatatype a -> Int
+isVenstre minDatatype = case minDatatype of
+  Venstre a -> 1
+  Hoyre a -> 0
+```
 ---
 # Hva er et bevis?
 
+Fjerne?
 ---
 
 # Alle term/verdier er et bevis
 
+```haskell
+num :: Int
+num = 42
+```
+* Vi kan se på typer som et utsagn
+    * Typen Int er sann hviss Int har en verdi
+*
+
+* PS : Gjelder kun hvis alt vi implementerer terminerer og ikke bruker errors/exceptions osv. Hvis ikke kan vi fort få motsigelser og inkonsistent logikk
 ---
 
-# True
+# Implikasjon
+
+* $A$ $\rightarrow$ $B$
+  * Fra A kan vi utlede B
+  * B følger fra A
+
+* I programmering blir det en funksjon
+  * fra $A$ til $B$
+  * tar inn en $A$ og returnerer en $B$
+
+* I Haskell brukes `->` for funksjonstyper
+
+```haskell
+impliesSelf :: a -> a
+impliesSelf a = a
+```
+
+--- 
+
+# Implikasjon - eksempler
+
+```haskell
+const :: a -> b -> a
+const a b = a
+
+
+flip :: (a -> b -> c) -> (b -> a -> c)
+flip a_b_c b a = a_b_c a b
+
+
+modusPonens :: (a -> b) -> a -> b
+modusPonens a_b a = a_b a
+```
+
+---
+# Sant - True
 
 * En verdi av typen $A$ beviser $A$
 * `True` er noe som alltid skal være sant.
@@ -55,10 +119,6 @@ data True = True
 ```kotlin
 object True
 ```
-
----
-
-# Implication
 
 ---
 
@@ -287,5 +347,11 @@ notnotImplies a2false_false = todo
 
 ---
 
-# Slutt
+# Oppsummering
+
+* Typer er utsagn
+* Programmer er bevis
+<!-- * Konkrete typer gir uinteressante beviss
+* Typevariabler gir interesante bevise
+*  -->
 
