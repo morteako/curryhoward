@@ -33,16 +33,16 @@ paginate: true
 ---
 # Recap : Utsagnslogikk
 
-* Formler: $A$, $B$, osv
 * Verdier : $\top$, $\bot$
 * Operatorer : &, |, $\rightarrow$ , $\neg$
-* Bevis : naturlig deduksjon
+* Formler
+  * Bygget opp av verdier og operatorer
+  * Bruker $A$,$B$ osv for å snakke om vilkårlige formler
+  * $\bot$ $\rightarrow$ $\top$ , $A$ $\rightarrow$ ($B$ & $\neg$ $B$) osv
+* Bevis
 
 --- 
 # Rask intro til Haskellsyntaks
-
-* `::` - har typen
-* Typevariabler (Generics) har små bokstaver : feks `a`
 
 ```haskell
 data MinDatatype a = Venstre a | Hoyre a
@@ -52,6 +52,10 @@ isVenstre minDatatype = case minDatatype of
   Venstre a -> 1
   Hoyre a -> 0
 ```
+
+* `::` - har typen
+* Typevariabler (Generics) har små bokstaver : feks `a`
+
 ---
 # Hva er et bevis?
 
@@ -321,14 +325,15 @@ notnotImplies a2false_false = todo
 # Logikk - klassisk
 
 * Det finnes flere logikksystemer
-* Den mest vanlig blir kalt "klassisk logikk"
-* Funker bra til ENDEL, men ikke til alt
+* Den mest vanlige blir kalt _klassisk logikk_
+* Funker bra til endel, men ikke til alt
 * Inkluderer
   * Excluded middle :: Or a (Not a)
   * Dobbelnegasjon (begge veier)
   * Motsigelsesbevis
     * Viser at det motsatte og viser til at det fører til usannhet, og derfor må det orginale være tilfelle
-    * Feks : bevise at $\sqrt{2}$ er et irrasjonelt tall ved å anta at det er et rasjonelt tall og vise at det fører til en kontradiksjon (noe usant)
+* Fører til litt _fjerne_ bevis der man sier at ting eksisterer pga det er en motsigelse hvis de ikke ikke-eksisterer
+
 ---
 # Konstruktiv logikk
 * Alle bevis demonstrerer eksistens
@@ -341,9 +346,27 @@ notnotImplies a2false_false = todo
   * Excluded middle : `Or a (Not a)` 
   * `Not (Not a) -> a`
   * Motsigelsesbevis
+* Et konstruktivt bevis kan ses på og brukes som en algoritme
 ---
 
-# DeMorgans
+# DeMorgans lover
+
+* not ($A$ | $B$) = (not $A$) & (not $B$)
+* not ($A$ & $B$) = (not $A$) | (not $B$)  
+
+
+
+```haskell 
+law2 :: And (Not a) (Not b) -> Not (Or a b)
+-- And (a -> False) (b -> False) -> Or a b -> False
+law2 (And a2False b2False) (OrL a) = a2False a
+law2 (And a2False b2False) (OrR b) = b2False b
+
+
+law3 :: Not (And a b) -> Or (Not a) (Not b)
+--(And a b -> False) -> Or (a -> False) (b -> False)
+law3 andAB2False = todo
+```
 
 ---
 
