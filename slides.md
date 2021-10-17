@@ -12,7 +12,6 @@ main = print "All tests passed"
 math: mathjax
 marp: true
 paginate: true 
-
 ---
 <!-- paginate: true -->
 
@@ -27,9 +26,28 @@ paginate: true
 
 * Hvis et utsagn kan bevises i logikk, kan man implementere en verdi for den korresponderende typen 🤯
 * Hvis man kan implementere en verdi for en type, så kan det korresponderende utsagnet bevises i logikk 🤯🤯
+* Kalles for Curry-Howard-korrespondansen
 
-* Bruker Haskell 
-  * Gjelder for alle statisk typede språk med med algebraiske datatyper eller sealed classes (eller lignende)*
+* Bruker Haskell i denne talken
+  * Gjelder for alle statisk typede språk med med algebraiske datatyper 
+---
+
+# Rask intro til Haskellsyntaks
+
+```haskell
+data MinDatatype a = Venstre a | Hoyre a
+
+eksempel :: Mindatatype Int
+eksempel = Venstre 1
+
+isVenstre :: MinDatatype a -> String
+isVenstre minDatatype = case minDatatype of
+  Venstre a -> "Yes"
+  Hoyre a -> "No"
+```
+PRESNOTES
+* `::` - har typen
+* Typevariabler (Generics) har små bokstaver : feks `a`
 ---
 # Recap : Utsagnslogikk
 
@@ -41,36 +59,19 @@ paginate: true
   * $\bot$ $\rightarrow$ $\top$ , $A$ $\rightarrow$ ($B$ & $\neg$ $B$) osv
 * Bevis
 
---- 
-# Rask intro til Haskellsyntaks
-
-```haskell
-data MinDatatype a = Venstre a | Hoyre a
-
-isVenstre :: MinDatatype a -> Int
-isVenstre minDatatype = case minDatatype of
-  Venstre a -> 1
-  Hoyre a -> 0
-```
-
-* `::` - har typen
-* Typevariabler (Generics) har små bokstaver : feks `a`
-
----
-# Hva er et bevis?
-
-Fjerne?
 ---
 
 # Alle term/verdier er et bevis
+
+
+* Vi kan se på typer som et utsagn
+    * Du kan bevise utsagnet `Int` ved å gi en eksempelverdi av typen `Int`
+* En implementasjon av en verdi av en type blir da et bevis for utsagnet typen representer er sann
 
 ```haskell
 num :: Int
 num = 42
 ```
-* Vi kan se på typer som et utsagn
-    * Typen Int er sann hviss Int har en verdi
-*
 
 * PS : Gjelder kun hvis alt vi implementerer terminerer og ikke bruker errors/exceptions osv. Hvis ikke kan vi fort få motsigelser og inkonsistent logikk
 ---
@@ -119,27 +120,16 @@ modusPonens a_b a = a_b a
 ```haskell
 data True = True
 ```
-
-```kotlin
-object True
-```
-
 ---
 
 # And
 
 * Logikk : A & B betyr både $A$ og $B$
 * Vi må da ha en datatype som har både en $A$ og en $B$
-* Haskell : 
   
 ```haskell
 data And a b = And a b
 ```
-* Kotlin : 
-```kotlin
-data class And<A,B>(val left:A, val right:B)
-```
-
 ---
 
 # And : eksempler
@@ -153,9 +143,6 @@ andLeft (And a b) = a
 
 andFlip :: And a b -> And b a
 andFlip (And a b) = todo
-
-aToAnd :: a -> And a b
-aToAnd a = todo
 ```
 
 
@@ -169,13 +156,6 @@ aToAnd a = todo
   
 ```haskell
 data Or a b = OrLeft a | OrRight  b
-```
-* Kotlin : 
-```kotlin
-sealed class Or<A,B>
-
-data class OrLeft<A,B>(val left:A):Or<A,B>()
-data class OrRight<A,B>(val right:B):Or<A,B>() 
 ```
 
 ---
@@ -205,6 +185,7 @@ orImpliesAnd orAB = case orAB of
 
 # False
 
+* TODO ref fra INt her
 * En verdi av typen $A$ beviser $A$
 * Vi skal ikke kunne bevise noe som ikke er sant
 * False (usant) må da være en type uten verdier
@@ -213,13 +194,8 @@ orImpliesAnd orAB = case orAB of
   * Rust : ! (never)
   * Haskell : Void
 
-Haskell
 ```haskell
 data False
-```
-Kotlin
-```kotlin
-class False private constructor()
 ```
 
 ---
@@ -231,11 +207,6 @@ Dette kan vi implementere/bevise
 ```haskell
 absurd :: False -> a
 absurd false = case false of {}
-```
-
-```kotlin
-fun <A> absurd(fals:False):A =
-    when(fals) {}
 ```
 
 ---
@@ -255,33 +226,20 @@ orFalse or_a_False = case or_a_False of
 Nå mangler vi bare Not , altså å negere et uttrykk
 * Sanne utsagn til usanne utsagn
 * Typer med verdier til typer uten verdier og motsatt 
-
-Et hendig logikktriks er da å implementere not ved hjelp av `False` og implikasjon
-```haskell
-type Not a = a -> False           --Haskell
-```
-
-```kotlin
-typealias Not<T> = (T) -> False   //Kotlin
-```
 * Ide: Hvis noe er usant, skal man da kunne utlede noe usant
 * Gir akkurat den oppførselen man får fra Not i logikk
----
-
-# Not : eksempler
 
 ```haskell
-explosion :: And a (Not a) -> False
---        :: And a (a -> False) -> False
-explosion (And a notA) = todo
-
+type Not a = a -> False
 ```
+
+
 
 --- 
 # Not Not
 
 * Vi har lært at dobbelnegering gjør at man ender opp med samme
-    * Not (Not a) $\rightarrow$ a
+    * not (not a) = $\rightarrow$ a
     * a $\rightarrow$ Not (Not a)
 
 * Hvis et utsagn er sant, så er det ikke sant at det utsagnet er usant (og motsatt)
@@ -356,7 +314,7 @@ notnotImplies a2false_false = todo
 
 
 
-```haskell 
+```haskell
 law2 :: And (Not a) (Not b) -> Not (Or a b)
 -- And (a -> False) (b -> False) -> Or a b -> False
 law2 (And a2False b2False) (OrL a) = a2False a
@@ -374,6 +332,7 @@ law3 andAB2False = todo
 
 * Typer er utsagn
 * Programmer er bevis
+* Yada yada Haskell er kult
 <!-- * Konkrete typer gir uinteressante beviss
 * Typevariabler gir interesante bevise
 *  -->
