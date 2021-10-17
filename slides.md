@@ -1,5 +1,4 @@
 ---
-
 ```haskell
 {-# OPTIONS_GHC -Wincomplete-patterns #-}
 {-# LANGUAGE EmptyCase #-}
@@ -29,17 +28,23 @@ h1 {
 }
 </style>
 
+
+
 # Bevis og programmering er sammme sak?
 
 * Advarsel 1: Uformelt (:
 * Advarsel 2: Litt dårlig tid :))
 * Advarsel 3: Gøy tema ((:(:
+<!-- -->
 ---
 
 # Curry-Howard-korrespondansen
-
+<!-- 
+  Bruker Haskell 
+  Gjelder for alle statisk typede språk med med algebraiske datatyper -->
 ##  Teorem i logikk $\leftrightarrow$ Typen har en verdi
 
+<!-- -->
 ---
 
 # Rask intro til Haskellsyntaks
@@ -55,11 +60,16 @@ isVenstre minDatatype = case minDatatype of
   Venstre a -> "Yes"
   Hoyre a -> "No"
 ```
+<!--
+* `::` - har typen
+* Typevariabler (Generics) har små bokstaver : feks `a`
+-->
 
+<!-- -->
 ---
 # Recap : Utsagnslogikk
 
-* Verdier : $\top$, $\bot$
+* Verdier : $\top$(true), $\bot$(false)
 * Operatorer : &, |, $\rightarrow$ , $\neg$
 * Formler
   * Bygget opp av verdier og operatorer
@@ -67,18 +77,21 @@ isVenstre minDatatype = case minDatatype of
   * $\bot$ $\rightarrow$ $\top$ , $A$ $\rightarrow$ ($B$ & $\neg$ $B$) osv
 * Bevis
 
+<!-- -->
 ---
 
-# Alle term/verdier er et bevis
+# Typer er utsagn og verdier er bevis
 
-* Typer er utsagn
-    * Du kan bevise utsagnet `Int` ved å gi en verdi av typen `Int`
-* En implementasjon av en verdi av en type blir da et bevis for utsagnet typen representer er sann
 
+* Du kan bevise utsagnet `Int` ved å gi en verdi av typen `Int`
 ```haskell
 num :: Int
 num = 42
 ```
+* En implementasjon av en verdi av en type blir da et bevis for utsagnet typen representer er sann
+
+
+<!-- Men Int er et ganske uinteressant utsagn. Det blir som True, som er trivielt sant -->
 ---
 
 # Implikasjon
@@ -95,12 +108,14 @@ impliesSelf :: a -> a
 impliesSelf a = a
 ```
 
+<!-- -->
 --- 
 
 # Implikasjon - eksempler
 
+<!-- Hvis jeg er fransk, så er det sant at hvis gud er død, så er jeg fransk -->
+
 ```haskell
--- Hvis jeg er fransk, så er det sant at hvis gud er død, så er jeg fransk
 const :: a -> b -> a
 const a b = a
 ```
@@ -115,6 +130,7 @@ modusPonens :: (a -> b) -> a -> b
 modusPonens a2b a = a2b a
 ```
 
+<!-- -->
 ---
 # Sant - True
 
@@ -125,6 +141,7 @@ modusPonens a2b a = a2b a
 ```haskell
 data True = True
 ```
+<!-- Kunne brukt Int -->
 ---
 
 # And
@@ -134,6 +151,7 @@ data True = True
 ```haskell
 data And a b = And a b
 ```
+<!-- For å bevise a og b, må man ha bevis for a og bevis for b-->
 ---
 
 # And : eksempler
@@ -148,8 +166,7 @@ ae2 (And a b) = a
 ae3 :: And a b -> And b a
 ae3 (And a b) = (And b a)
 ```
-
-
+<!-- -->
 ---
 
 # Or
@@ -161,6 +178,7 @@ ae3 (And a b) = (And b a)
 data Or a b = OrLeft a | OrRight  b
 ```
 
+<!-- -->
 ---
 
 # Or : eksempler
@@ -185,43 +203,54 @@ oe4 = umulig
 ```
 
 
+<!-- -->
 ---
 
-# False
+# False - en type uten verdier
 
-* TODO ref fra INt her
-* En verdi av typen $A$ beviser $A$
-* Vi skal ikke kunne bevise noe som ikke er sant
-* False (usant) må da være en type uten verdier
-* Er faktisk praktisk nyttig
-  * Kotlin : Nothing
-  * Rust : ! (never)
-  * Haskell : Void
+* $\bot$ - usant
+* Husk : Typer er utsagn og verdier er bevis
+  * En verdi av typen $A$ beviser $A$
+* Vi skal aldri kunne bevise ´False´
+
 
 ```haskell
 data False
 ```
 
+* Er faktisk praktisk nyttig
+  * Kotlin : Nothing
+  * Rust : ! (never)
+  * Haskell : Void
+
+<!--
+
+* Vi skal ikke kunne bevise noe som ikke er sant
+* False (usant) må da være en type uten verdier
+*  -->
 ---
 # False - absurd
 Fra noe usant kan man utlede hva som helst!
 
-Dette kan vi implementere/bevise 
 
 ```haskell
-absurd :: False -> a
+absurd :: False -> b
 absurd false = case false of {}
 
 orFalse :: Or a False -> a
 orFalse or_a_False = case or_a_False of
     OrLeft a -> a
-    OrRight false -> todo
+    OrRight false -> absurd false
 ```
+<!-- 
+Dette kan vi implementere/bevise 
+Bruke til å bevise at hvis man har 
+-->
 ---
 
 # Not - Negasjon
-Nå mangler vi bare Not , altså å negere et uttrykk
-* Sanne utsagn til usanne utsagn
+
+* Logikk : Sanne utsagn til usanne utsagn
 * Typer med verdier til typer uten verdier og motsatt 
 * Ide: Hvis noe er usant, skal man da kunne utlede noe usant
 * Gir akkurat den oppførselen man får fra Not i logikk
@@ -229,9 +258,13 @@ Nå mangler vi bare Not , altså å negere et uttrykk
 ```haskell
 type Not a = a -> False
 ```
+<!--
+Mangler bare not
+logikktriks å implementere not ved hjelp av `False` og implikasjon
+-->
 
 
-
+<!-- -->
 --- 
 # Not Not
 
@@ -251,6 +284,7 @@ impliesNotNot a a2false = todo
 ```
 
 
+<!-- -->
 ---
 
 # Not Not - andre veien
@@ -262,6 +296,7 @@ notnotImplies :: Not (Not a) -> a
 notnotImplies a2false_false = todo
 ```
 
+<!-- -->
 ---
 
 
@@ -272,8 +307,8 @@ notnotImplies a2false_false = todo
 * Henger det ikke på greip?
 * Burde jeg holdt foredrag om noe annet, som gir mer mening?
   * Feks Spring og JavaBeans 
-* Eller kan vi redde oss inn?  -->
-
+* Eller har vi bare ikke vært presise nok når vi snakker om logikk? 
+* -->
 
 ---
 
@@ -282,25 +317,31 @@ notnotImplies a2false_false = todo
 * Det finnes flere logikksystemer
 * Den mest vanlige blir kalt _klassisk logikk_
 * Med `Or a (Not a)`,`Not (Not a) -> a` og motsigelsesbevis
-    <!-- * Viser at det motsatte og viser til at det fører til usannhet, og derfor må det orginale være tilfelle -->
-* Fører til litt "_fjerne_" bevis
-<!-- * der man sier at ting eksisterer pga det er en motsigelse hvis de ikke ikke-eksisterer -->
+   
+* Fører til litt "_fjerne_" bevis som ikke
 
+
+<!--
+* der man sier at ting eksisterer pga det er en motsigelse hvis de ikke ikke-eksisterer
+ * Viser at det motsatte og viser til at det fører til usannhet, og derfor må det orginale være tilfelle
+ -->
 ---
 # Konstruktiv logikk
 * Alle bevis demonstrerer eksistens
   * Å bevise $A$ er å demonstrere at $A$ eksisterer, med et eksempel
 * En "svakere" logikk
-  <!-- * Alt som er sant i konstruktiv logikk er sant i klassisk, men ikke motsatt
-  * Så alt vi kan bevise med programmering er gyldige klassiske bevis også, men vi kan ikke bevise alt -->
 * Uten `Or a (Not a)`,`Not (Not a) -> a` og motsigelsesbevis
-* Bevis er algoritmer
+
+<!-- 
+Alt som er sant i konstruktiv logikk er sant i klassisk, men ikke motsatt
+Så alt vi kan bevise med programmering er gyldige klassiske bevis også, men vi kan ikke bevise alt 
+
+-->
 ---
 
-# DeMorgans lover
+# De Morgans lover
 
 * not ($A$ | $B$) = (not $A$) & (not $B$)
-* not ($A$ & $B$) = (not $A$) | (not $B$)  
 
 ```haskell
 law2 :: And (Not a) (Not b) -> Not (Or a b)
@@ -308,25 +349,25 @@ law2 :: And (Not a) (Not b) -> Not (Or a b)
 law2 (And a2False b2False) orAB = case oraB of
   OrL a -> a2False a
   OrR b -> b2False b
+```
 
-
+* not ($A$ & $B$) = (not $A$) | (not $B$)  
+```haskell
 law3 :: Not (And a b) -> Or (Not a) (Not b)
 --(And a b -> False) -> Or (a -> False) (b -> False)
 law3 andAB2False = umulig
 ```
 
+<!-- -->
 ---
 
 # Oppsummering
 
-* Typer er utsagn
-* Programmer er bevis
+* Typer er utsagn, programmer er bevis
 * Interresante typer gir interessante bevis
 * Gjelder for mange logikk og typesystemer
 * Grunnlaget for theorem provers som Coq, Agda, Lean
   
 * PS : Gjelder kun hvis alt vi implementerer terminerer og ikke bruker errors/exceptions osv. Hvis ikke kan vi fort få motsigelser og inkonsistent logikk
-<!-- * Konkrete typer gir uinteressante beviss
-* Typevariabler gir interesante bevise
-*  -->
+
 

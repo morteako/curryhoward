@@ -17,7 +17,6 @@ minimum:
 
 
 
-"redde oss inn"
 
 Konstrukkiv/int logikk
 
@@ -31,3 +30,20 @@ Programmer er bevis
 
 Curry-howard bevist
 Teoorem proving, kompilatoren hjelper til
+
+
+
+Konstrukkiv/int logikk
+
+
+Korrekte og presise formuleringer
+
+Done:
+    Fixe :
+        Kun const
+        Ha ett eksempel man går igjennom men kan vise flere
+
+    Droppe:
+        explosion
+        Bevis i kotlin
+        "redde oss inn"
