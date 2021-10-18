@@ -30,29 +30,23 @@ h1 {
 
 
 
-# Bevis og programmering er sammme sak?
+## Bevis og programmering er sammme sak?
 
+
+<!--
 * Advarsel 1: Uformelt (:
 * Advarsel 2: Litt dårlig tid :))
 * Advarsel 3: Gøy tema ((:(:
-<!-- -->
+ -->
 ---
 
-# Curry-Howard-korrespondansen
-<!-- 
-  Bruker Haskell 
-  Gjelder for alle statisk typede språk med med algebraiske datatyper -->
-##  Teorem i logikk $\leftrightarrow$ Typen har en verdi
-
-<!-- -->
----
 
 # Rask intro til Haskellsyntaks
 
 ```haskell
 data MinDatatype a = Venstre a | Hoyre a
 
-eksempel :: Mindatatype Int
+eksempel :: MinDatatype Int
 eksempel = Venstre 1
 
 isVenstre :: MinDatatype a -> String
@@ -65,25 +59,40 @@ isVenstre minDatatype = case minDatatype of
 * Typevariabler (Generics) har små bokstaver : feks `a`
 -->
 
+---
+
+# Hva er bevis?
+
+* Et argument som viser at antagelsene garanterer konklusjonen
+* Sammenheng med programmering? 
+<!--
+-->
+---
+
+# Curry-Howard-korrespondansen
+<!-- 
+  Bruker Haskell 
+  Gjelder for alle statisk typede språk med med algebraiske datatyper -->
+##  Teorem i logikk $\leftrightarrow$ Typen har en verdi
+
 <!-- -->
 ---
 # Recap : Utsagnslogikk
 
 * Verdier : $\top$(true), $\bot$(false)
-* Operatorer : &, |, $\rightarrow$ , $\neg$
+* Operatorer : &, |, $\rightarrow$ , not
 * Formler
   * Bygget opp av verdier og operatorer
   * Bruker $A$,$B$ osv for å snakke om vilkårlige formler
-  * $\bot$ $\rightarrow$ $\top$ , $A$ $\rightarrow$ ($B$ & $\neg$ $B$) osv
+  * $\bot$ $\rightarrow$ $\top$ , $A$ $\rightarrow$ ($B$ & not $B$) osv
 * Bevis
 
 <!-- -->
 ---
 
-# Typer er utsagn og verdier er bevis
+# Typer er utsagn og programmer er bevis
 
-
-* Du kan bevise utsagnet `Int` ved å gi en verdi av typen `Int`
+* Du kan bevise utsagnet `Int` ved å gi en eksempelverdi av typen `Int`
 ```haskell
 num :: Int
 num = 42
@@ -118,16 +127,6 @@ impliesSelf a = a
 ```haskell
 const :: a -> b -> a
 const a b = a
-```
-
-Flere eksempler
-```haskell
-flip :: (a -> b -> c) -> (b -> a -> c)
-flip ab2c b a = ab2c a b
-
-
-modusPonens :: (a -> b) -> a -> b
-modusPonens a2b a = a2b a
 ```
 
 <!-- -->
@@ -169,10 +168,9 @@ ae3 (And a b) = (And b a)
 <!-- -->
 ---
 
-# Or
+# | : Or 
 
-* Logikk : $A$ | $B$ er et teorem hvis enten $A$ er et teorem og/eller $B$ er et teorem
-* Haskell : 
+* Logikk : $A$ | $B$ er et teorem hvis $A$ er et teorem eller $B$ er et teorem
   
 ```haskell
 data Or a b = OrLeft a | OrRight  b
@@ -192,16 +190,6 @@ oe2 orAA = case orAA of
     OrLeft a -> a
     OrRight a -> a
 ```
-
-Ekstra eksempler
-```haskell
-oe3 :: And a b -> Or a b
-oe3 (And a b) = OrRight b
-
-oe4 :: Or a b -> And a b
-oe4 = umulig
-```
-
 
 <!-- -->
 ---
@@ -250,10 +238,7 @@ Bruke til å bevise at hvis man har
 
 # Not - Negasjon
 
-* Logikk : Sanne utsagn til usanne utsagn
-* Typer med verdier til typer uten verdier og motsatt 
-* Ide: Hvis noe er usant, skal man da kunne utlede noe usant
-* Gir akkurat den oppførselen man får fra Not i logikk
+* Typer med verdier til typer uten verdier
 
 ```haskell
 type Not a = a -> False
@@ -261,30 +246,32 @@ type Not a = a -> False
 <!--
 Mangler bare not
 logikktriks å implementere not ved hjelp av `False` og implikasjon
+* Ide: Hvis noe er usant, skal man da kunne utlede noe usant
+* Gir akkurat den oppførselen man får fra NOt i logikk
 -->
 
 
 <!-- -->
 --- 
-# Not Not
+# Not Not - dobbelnegering
 
-* Vi har lært at dobbelnegering gjør at man ender opp med samme
-    * not (not a) = $\rightarrow$ a
-    * a $\rightarrow$ Not (Not a)
+* not (not a) $\rightarrow$ a
+* a $\rightarrow$ not (not a)
 
-* Hvis et utsagn er sant, så er det ikke sant at det utsagnet er usant (og motsatt)
-* "Hvis det ikke er tilfelle at vi ikke jobber i Bekk, så jobber vi i Bekk "
+
 
 ```haskell
 impliesNotNot :: a -> Not (Not a)
 --            :: a -> (Not (a -> False)
 --            :: a -> ((a -> False) -> False)
 --            :: a -> (a -> False) -> False
-impliesNotNot a a2false = todo
+impliesNotNot a a2false = a2false a
 ```
 
-
-<!-- -->
+<!--
+* "Hvis det ikke er sant at vi ikke er på ifi, så er vi på ifi "
+* * Hvis et utsagn er sant, så er det ikke sant at det utsagnet er usant (og motsatt)
+ -->
 ---
 
 # Not Not - andre veien
@@ -293,7 +280,7 @@ impliesNotNot a a2false = todo
 notnotImplies :: Not (Not a) -> a
 --            :: (Not (a -> False)) -> a
 --            :: ((a -> False) -> False) -> a
-notnotImplies a2false_false = todo
+notnotImplies a2false_false = umulig
 ```
 
 <!-- -->
@@ -306,7 +293,7 @@ notnotImplies a2false_false = todo
 <!-- * Har alt vært forgjeves?
 * Henger det ikke på greip?
 * Burde jeg holdt foredrag om noe annet, som gir mer mening?
-  * Feks Spring og JavaBeans 
+  * Javascript
 * Eller har vi bare ikke vært presise nok når vi snakker om logikk? 
 * -->
 
@@ -317,8 +304,8 @@ notnotImplies a2false_false = todo
 * Det finnes flere logikksystemer
 * Den mest vanlige blir kalt _klassisk logikk_
 * Med `Or a (Not a)`,`Not (Not a) -> a` og motsigelsesbevis
-   
-* Fører til litt "_fjerne_" bevis som ikke
+
+* Kan føre til litt "_fjerne_" bevis
 
 
 <!--
@@ -346,9 +333,9 @@ Så alt vi kan bevise med programmering er gyldige klassiske bevis også, men vi
 ```haskell
 law2 :: And (Not a) (Not b) -> Not (Or a b)
 --   :: And (a -> False) (b -> False) -> Or a b -> False
-law2 (And a2False b2False) orAB = case oraB of
-  OrL a -> a2False a
-  OrR b -> b2False b
+law2 (And a2False b2False) orAB = case orAB of
+  OrLeft a -> a2False a
+  OrRight b -> b2False b
 ```
 
 * not ($A$ & $B$) = (not $A$) | (not $B$)  
@@ -364,8 +351,8 @@ law3 andAB2False = umulig
 # Oppsummering
 
 * Typer er utsagn, programmer er bevis
-* Interresante typer gir interessante bevis
-* Gjelder for mange logikk og typesystemer
+* Dyp korrespondanse : gjelder for mange logikk og typesystemer
+* Bevisene blir maskinsjekket!
 * Grunnlaget for theorem provers som Coq, Agda, Lean
   
 * PS : Gjelder kun hvis alt vi implementerer terminerer og ikke bruker errors/exceptions osv. Hvis ikke kan vi fort få motsigelser og inkonsistent logikk
