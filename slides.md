@@ -2,7 +2,6 @@
 ```haskell
 {-# OPTIONS_GHC -Wincomplete-patterns #-}
 {-# LANGUAGE EmptyCase #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 import Prelude hiding (Bool(..), curry, uncurry)
 umulig = undefined
 main = print "All tests passed"
@@ -71,6 +70,7 @@ isVenstre minDatatype = case minDatatype of
 
 # Curry-Howard-korrespondansen
 <!-- 
+  Bevisssystsemer og typesystemer
   Bruker Haskell 
   Gjelder for alle statisk typede språk med med algebraiske datatyper -->
 ##  Teorem i logikk $\leftrightarrow$ Typen har en verdi
@@ -117,7 +117,9 @@ impliesSelf :: a -> a
 impliesSelf a = a
 ```
 
-<!-- -->
+<!--
+Hvis jeg får en verdi med type a,så kan jeg gi en verdi med type b
+-->
 --- 
 
 # Implikasjon - eksempler
@@ -129,9 +131,11 @@ const :: a -> b -> a
 const a b = a
 ```
 
-<!-- -->
+<!--
+
+-->
 ---
-# Sant - True
+# $\top$ : Sant - True
 
 * En verdi av typen $A$ beviser utsagnet $A$
 * `True` er da typen som er trivielt sant.
@@ -143,7 +147,7 @@ data True = True
 <!-- Kunne brukt Int -->
 ---
 
-# And
+# & : And
 
 * Logikk : $A$ & $B$ er et teorem kun hvis både $A$ og $B$ er teoremer 
   
@@ -194,12 +198,10 @@ oe2 orAA = case orAA of
 <!-- -->
 ---
 
-# False - en type uten verdier
+# $\bot$ : False - en type uten verdier
 
-* $\bot$ - usant
-* Husk : Typer er utsagn og verdier er bevis
-  * En verdi av typen $A$ beviser $A$
-* Vi skal aldri kunne bevise ´False´
+* En verdi av typen $A$ beviser utsagnet $A$
+* $\bot$ - usant - skal aldri kunne bevises
 
 
 ```haskell
