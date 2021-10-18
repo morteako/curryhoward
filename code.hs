@@ -1,6 +1,5 @@
 {-# OPTIONS_GHC -Wincomplete-patterns #-}
 {-# LANGUAGE EmptyCase #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 import Prelude hiding (Bool(..), curry, uncurry)
 umulig = undefined
 main = print "All tests passed"
