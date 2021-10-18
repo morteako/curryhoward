@@ -5,7 +5,6 @@ ppt:
 code:
 	 cat slides.md | codedown haskell > code.hs
 
-
 all : 
 	make code
 	make ppt

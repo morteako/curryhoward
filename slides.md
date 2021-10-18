@@ -31,6 +31,7 @@ h1 {
 
 ## Bevis og programmering er sammme sak?
 
+### Hvordan få kompilatoren til å hjelpe deg med bevis
 
 <!--
 * Advarsel 1: Uformelt (:
@@ -355,8 +356,11 @@ law3 andAB2False = umulig
 * Typer er utsagn, programmer er bevis
 * Dyp korrespondanse : gjelder for mange logikk og typesystemer
 * Bevisene blir maskinsjekket!
+  * All koden i denne talken kompilerer*
 * Grunnlaget for theorem provers som Coq, Agda, Lean
   
-* PS : Gjelder kun hvis alt vi implementerer terminerer og ikke bruker errors/exceptions osv. Hvis ikke kan vi fort få motsigelser og inkonsistent logikk
+  
+  
+* *Gjelder kun hvis alt vi implementerer terminerer og ikke bruker errors/exceptions osv. Hvis ikke kan vi fort få motsigelser og inkonsistent logikk. Ref `umulig`
 
 
