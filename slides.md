@@ -31,7 +31,6 @@ h1 {
 
 ## Bevis og programmering er sammme sak?
 
-### Hvordan få kompilatoren til å hjelpe deg med bevis
 
 <!--
 * Advarsel 1: Uformelt (:
