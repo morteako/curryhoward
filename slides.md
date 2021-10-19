@@ -31,6 +31,9 @@ h1 {
 
 ## Bevis og programmering er sammme sak?
 
+#### Morten Kolstad - Bekk fagdag oktober 2021
+
+* Takk til Gaute Berge
 
 <!--
 * Advarsel 1: Uformelt (:
@@ -111,7 +114,8 @@ num = 42
   * parametertype $A$
   * returtype $B$
   * Haskell : `a -> b`
-* Eksempel
+* Typevariabler gjør at vi ikke mister generalitet
+* Eksempel : $A$ $\rightarrow$ $A$
 ```haskell
 impliesSelf :: a -> a
 impliesSelf a = a
@@ -122,9 +126,10 @@ Hvis jeg får en verdi med type a,så kan jeg gi en verdi med type b
 -->
 --- 
 
-# Implikasjon - eksempler
+# Implikasjon - eksempel
 
-<!-- Hvis jeg er fransk, så er det sant at hvis gud er død, så er jeg fransk -->
+* $A$ $\rightarrow$ $B$ $\rightarrow$ $A$
+* Hvis jeg er fransk, så er det sant at hvis 2+2=5, så er jeg fransk
 
 ```haskell
 const :: a -> b -> a
