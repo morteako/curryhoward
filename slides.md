@@ -1,10 +1,5 @@
 ---
 ```haskell
-{-# OPTIONS_GHC -Wincomplete-patterns #-}
-{-# LANGUAGE EmptyCase #-}
-import Prelude hiding (Bool(..), curry, uncurry)
-umulig = undefined
-main = print "All tests passed"
 ```
 }}}
 math: mathjax
@@ -45,6 +40,8 @@ h1 {
 
 # Rask intro til Haskellsyntaks
 
+
+
 ```haskell
 data MinDatatype a = Venstre a | Hoyre a
 
@@ -56,6 +53,8 @@ isVenstre minDatatype = case minDatatype of
   Venstre a -> "Yes"
   Hoyre a -> "No"
 ```
+
+
 <!--
 * `::` - har typen
 * Typevariabler (Generics) har små bokstaver : feks `a`
@@ -100,6 +99,9 @@ isVenstre minDatatype = case minDatatype of
 num :: Int
 num = 42
 ```
+```kotlin
+val num : Int = 42
+```
 * En implementasjon av en verdi av en type blir da et bevis for utsagnet typen representer er sann
 
 
@@ -111,14 +113,16 @@ num = 42
 * $A$ $\rightarrow$ $B$
 
 * I programmering : funksjoner
-  * parametertype $A$
-  * returtype $B$
-  * Haskell : `a -> b`
+  * parametertype $A$, returtype $B$
+  * Haskell : `a -> b`,  Kotlin : `<A,B> fun f(a:A):B`
 * Typevariabler gjør at vi ikke mister generalitet
 * Eksempel : $A$ $\rightarrow$ $A$
 ```haskell
 impliesSelf :: a -> a
 impliesSelf a = a
+```
+```kotlin
+fun <A> impliesSelf(a:A):A = a
 ```
 
 <!--
@@ -135,6 +139,9 @@ Hvis jeg får en verdi med type a,så kan jeg gi en verdi med type b
 const :: a -> b -> a
 const a b = a
 ```
+```kotlin
+fun <A,B> const(a:A,b:B):A = a
+```
 
 <!--
 
@@ -149,6 +156,9 @@ const a b = a
 ```haskell
 data True = True
 ```
+```kotlin
+object True
+```
 <!-- Kunne brukt Int -->
 ---
 
@@ -158,6 +168,9 @@ data True = True
   
 ```haskell
 data And a b = And a b
+```
+```kotlin
+data class And<A,B>(val a:A, val b:B)
 ```
 <!-- For å bevise a og b, må man ha bevis for a og bevis for b-->
 ---
@@ -174,6 +187,13 @@ ae2 (And a b) = a
 ae3 :: And a b -> And b a
 ae3 (And a b) = (And b a)
 ```
+```kotlin
+val ae1 : And<True,True> = And(True,True)
+
+fun <A,B> ae2(and:And<A,B>):A = and.a
+
+fun <A,B> ae3(and:And<A,B>):And<B,A> = And(and.b, and.a)
+```
 <!-- -->
 ---
 
@@ -183,6 +203,11 @@ ae3 (And a b) = (And b a)
   
 ```haskell
 data Or a b = OrLeft a | OrRight  b
+```
+```kotlin
+sealed class Or<A,B>
+data class OrLeft<A,B>(val a:A):Or<A,B>()
+data class OrRight<A,B>(val b:B):Or<A,B>()
 ```
 
 <!-- -->
@@ -199,6 +224,14 @@ oe2 orAA = case orAA of
     OrLeft a -> a
     OrRight a -> a
 ```
+```kotlin
+fun <B> oe1 ():Or<True,B> = OrLeft(True)
+
+fun <A> oe2 (orAA:Or<A,A>) : A = when(orAA) {
+    is OrLeft -> orAA.a
+    is OrRight -> orAA.b
+}
+```
 
 <!-- -->
 ---
@@ -212,9 +245,12 @@ oe2 orAA = case orAA of
 ```haskell
 data False
 ```
+```kotlin
+typealias False = Nothing
+```
 
 * Er faktisk praktisk nyttig
-  * Kotlin : Nothing
+  * Haskell : Nothing
   * Rust : ! (never)
   * Haskell : Void
 
@@ -237,6 +273,14 @@ orFalse or_a_False = case or_a_False of
     OrLeft a -> a
     OrRight false -> absurd false
 ```
+```kotlin
+fun <B> absurd(n:False) : B = when(n) { }
+
+fun <A> orFalse(or_a_False:Or<A,False>):A = when(or_a_False) {
+    is OrLeft -> or_a_False.a
+    is OrRight -> absurd(or_a_False.b)
+}
+```
 <!-- 
 Dette kan vi implementere/bevise 
 Bruke til å bevise at hvis man har 
@@ -249,6 +293,9 @@ Bruke til å bevise at hvis man har
 
 ```haskell
 type Not a = a -> False
+```
+```kotlin
+typealias Not<A> = (A) -> False
 ```
 <!--
 Mangler bare not
@@ -274,6 +321,12 @@ impliesNotNot :: a -> Not (Not a)
 --            :: a -> (a -> False) -> False
 impliesNotNot a a2false = a2false a
 ```
+```kotlin
+fun <A> impliesNotNot(a:A):Not<Not<A>> =
+    {a2false: (A) -> False -> 
+        a2false(a)
+    }
+```
 
 <!--
 * "Hvis det ikke er sant at vi ikke er på ifi, så er vi på ifi "
@@ -289,7 +342,10 @@ notnotImplies :: Not (Not a) -> a
 --            :: ((a -> False) -> False) -> a
 notnotImplies a2false_false = umulig
 ```
-
+```kotlin
+fun <A> notnotImplies(f:Not<Not<A>>):A =
+    TODO("UMULIG")
+```
 <!-- -->
 ---
 
