@@ -21,6 +21,7 @@ paginate: true
   * Sumtyper?
   * Produkttyper?
 * Hvordan kan vi bruke matte til å forenkle datatyper?
+* Kode i Haskell og kanskje noen nye ord? :))
 ---
 
 # Typer og datatyper
@@ -34,7 +35,7 @@ v :: MinDatatype Int
 v = Konstruktor 5
 ```
 ```haskell
--- Unit
+-- Unit i Kotlin
 data () = ()
 ```
 
@@ -57,6 +58,7 @@ data Dag = Mandag | Tirsdag | Onsdag | Torsdag | Fredag | Loerdag  | Soendag
   * Det ene OG det andre
 ```haskell
 data BoolPair = BoolPair Bool Bool
+--alle muligheter
 b1 = BoolPair False False
 b2 = BoolPair False True
 b3 = BoolPair True False
@@ -73,6 +75,7 @@ b4 = BoolPair True True
 * Mange forskjellige varianter av likhet
 * Her : to typer er like hvis og bare hvis de har like mange unike verdier
     * Samme kardinalitet
+    * Isomorfe
 
 ```haskell
 data Bool = True | False
@@ -83,8 +86,9 @@ data Melk = Lett | Hel | Skummet
 ```
 ---
 # Isomorfe
+* To typer er isomorfe hvis det finnes en isomorfisme 🙃
 * Samme struktur
-* Mappe fram og tilbake med to funksjon
+* Mappe fram og tilbake med to funksjoner
   * en-til-en-korrespondanse
 * Isomorfe hvis og bare hvis de har like mange unike verdier
 ```haskell
@@ -96,8 +100,6 @@ toL :: b -> a
 toL (toR a) == a
 toR (toL b) == b
 ```
-
-
 
 ---
 # Isomorfe eksempler
@@ -146,7 +148,7 @@ toL ((a,b),c) = (a,(b,c))
 # * Standard generisk sumtype - Either
 
 * Representerer +
-* Either Bool Melk : 2+3 = 5
+* Either Bool () : 2+1 = 3
 
 ```haskell
 data Either a b = Left a | Right b
@@ -155,7 +157,6 @@ Either a b ~= Either b a --kommutativ
 switchEither (Left x) = Right x
 switchEither (Right x) = Left x
 toR = toL = switchEither
-
 ```
 ```haskell
 (Either a (Either b c)) ~= (Either (Either a b) c) -- assosiativ
@@ -166,24 +167,6 @@ toR = toL = switchEither
 Either () a ~= Maybe a -- 1 + a
 ```
 
----
-
-# Maybe
-* Hva blir da Maybe?
-```haskell
-data Maybe a = Nothing | Just a
-```
-* Det blir + 1
-  
-```haskell
-1+1       = 2
-Maybe () ~= Bool
-
-
-Maybe a  :  a + 1
-
-Either () a ~= Maybe a
-```
 
 ---
 # Identitetselementer - 0
@@ -267,12 +250,13 @@ toL (a, Right c) = Right (a,c)
 toR (Left (a,b)) = (a, Left b)
 toR (Right (a,c)) = (a, Right c)
 ```
-(Den andre distribusjon er ca helt lik)
+(Den andre distribusjonen er veldig lik)
 
 
 ---
 
 # Hva med funksjoner?
+* Rene funksjoner er mapping fra input til output
 * Hva blir kardinaliteten for
 
 ```haskell
@@ -313,8 +297,21 @@ Void -> a ~= ()
 toR _ = ()
 toL () = \v -> absurd v
 ```
+
 ---
 # Potensregler - har sammenheng med currying?
+
+* Currya- funksjoner og tupla-funksjoner
+  er like kraftfulle
+* Ligger i standardlib :
+```haskell
+curry   :: ((c,b)  -> a) -> (c -> (b -> a))
+curry cb2a = \c b -> cb2a (c,b)
+uncurry :: (c -> b -> a) -> ((c,b)  -> a)
+uncurry cba = \(c,b) -> cba c b
+```
+---
+# Potensregler - har sammenheng med currying? 🤯
 
 $$a^{b*c} = (a^b)^c$$
 
@@ -323,24 +320,59 @@ $$a^{b*c} = (a^b)^c$$
 -- siden (,) er kommutativ
 (c,b) -> a ~= c -> (b -> a)
 
-toR cb2a = \c b -> cb2a (c,b)
-toL c2b2a = \(c,b) -> c2b2a c b
+toR = curry
+toL = uncurry
 ```
 
-* Lligger i standardlib :
+---
+# Forenkle datatyper 1 : sponset av Tine™️
+
 ```haskell
-curry   :: ((c,b)  -> a) -> (c -> (b -> a))
-uncurry :: (c -> b -> a) -> ((c,b)  -> a)
+data Melk = Hel | Lett | Skummet
+-- Vi vil forenkle :
+(Melk,Melk,Bool -> Melk)
+--
+3*3 * 3^2 = 3^3
+--
+Melk -> Melk
+🐄->🐄
+🥛 -> 🥛
+
+-- eller
+(Melk,Melk,Melk,Melk)
+(🥛,🥛,🥛,🥛)
 ```
-
-
 ---
-# Forenkle datatyper
+# Forenkle datatyper 2
 
+* Forenkle en hårete 💇‍♀️ type : `(b -> x -> a, c -> x ->  a)`
+
+```haskell
+--(a^x)^b * (a^x)^c
+(b -> x -> a, c -> x ->  a)
+-- currying , a^(b*c) = (a^b)^c
+((b, x) -> a, (c, x) ->  a)
+-- potensregel : a^b * a^c = a^(b*c)
+Either (b,x) (c,x) -> a
+-- Distribusjon -- a*b + a*c = c * (a+b)
+(Either b c, x) -> a
+-- a^((b+c) * x)
+```
+* til en koselig `(Either b c, x) -> a`
 ---
-# Konklusjon
+# Konklusjon og litt ekstra snacks 🍭
 
+* Bedre forståelse av algebraiske datatyper og terminologi
 * Fascinerende sammenheng mellom aritmetikk og algebraiske datatyper
 * Forenkle og manipulere
+
+## Finnes selvfølgelig mer :))
+* Rekursive typer
+```haskell
+data List a = Null | Cons a (List a)
+gir  L(x)   = 1    +     x * L(x)
+```
+* Derivering og Taylor series
 * Hva med minus og deling? 🤔🤯
+
   
