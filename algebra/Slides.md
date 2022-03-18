@@ -30,8 +30,12 @@ paginate: true
 ```haskell
 data MinDatatype a = Konstruktor a
 
-v :: Datatype Int
+v :: MinDatatype Int
 v = Konstruktor 5
+```
+```haskell
+-- Unit
+data () = ()
 ```
 
 ---
@@ -44,18 +48,22 @@ data Bool = False | True
 data Dag = Mandag | Tirsdag | Onsdag | Torsdag | Fredag | Loerdag  | Soendag
 ```
 * Antall unike verdier : summere unike verdier til hver konstruktør
-
+  * Kalles for kardinaliteten
+* Hva er kardinaliteten til Bool og Dag?
 ---
 
 # Produkt-typer
-* Kombinerer flere verdier til en verdi
+* Kombinerer flere verdier til en sammensatt verdi
   * Det ene OG det andre
 ```haskell
-data BoolPair = Coord Bool Bool
-
-data Person = Person String Int Bool
+data BoolPair = BoolPair Bool Bool
+b1 = BoolPair False False
+b2 = BoolPair False True
+b3 = BoolPair True False
+b4 = BoolPair True True
 ```
-* Antall unike verdier : multiplisere unike verdier til type 
+* Antall unike verdier : multiplisere unike verdier til hvert felt
+* Kardinalitet : 4
 
 ---
 
@@ -63,8 +71,8 @@ data Person = Person String Int Bool
 
 * Hva vil det si at at noe er likt?
 * Mange forskjellige varianter av likhet
-* Her : toR typer er like hviss de har like mange unike verdier
-    * Samme kardinalitet (kardinalitet)
+* Her : to typer er like hvis og bare hvis de har like mange unike verdier
+    * Samme kardinalitet
 
 ```haskell
 data Bool = True | False
@@ -78,15 +86,15 @@ data Melk = Lett | Hel | Skummet
 * Samme struktur
 * Mappe fram og tilbake med to funksjon
   * en-til-en-korrespondanse
-* Isomorfe hviss de har like mange unike verdier
+* Isomorfe hvis og bare hvis de har like mange unike verdier
 ```haskell
 a ~= b
 toR :: a -> b
 toL :: b -> a
 
 -- fram og tilbake skal ende opp med samme verdi
-toL (toR a) = a
-toR (toL b) = b
+toL (toR a) == a
+toR (toL b) == b
 ```
 
 
@@ -119,14 +127,15 @@ toL (b,i) = (i,b)
 
 * Tuppel
 * Representerer *
-* (Bool,Bool) : 2*2 : 4
+* (Bool,Bool) : 2*2 = 4
 
 ```haskell
 data (a,b) = (a,b)
 
 (a,b) ~= (b,a) --kommutativ
 toR = toL = \(x,y) -> (y,x) -- swap
-
+```
+```haskell
 (a,(b,c)) ~= ((a,b),c) -- assosiativ
 toR (a,(b,c)) = ((a,b),c)
 toL ((a,b),c) = (a,(b,c))
@@ -137,19 +146,24 @@ toL ((a,b),c) = (a,(b,c))
 # * Standard generisk sumtype - Either
 
 * Representerer +
-* Either Bool Melk : 2+3 : 5
+* Either Bool Melk : 2+3 = 5
 
 ```haskell
 data Either a b = Left a | Right b
 
 Either a b ~= Either b a --kommutativ
 switchEither (Left x) = Right x
-switchEither (Right x) = Leftt x
+switchEither (Right x) = Left x
 toR = toL = switchEither
 
+```
+```haskell
 (Either a (Either b c)) ~= (Either (Either a b) c) -- assosiativ
 -- ta den i hodet 🙃
+```
 
+```haskell
+Either () a ~= Maybe a -- 1 + a
 ```
 
 ---
@@ -180,7 +194,7 @@ Either () a ~= Maybe a
 data Void 
 
 absurd :: Void -> a
-abusrd v = case v of {}
+absurd v = case v of {}
 ```
 
 ```haskell
@@ -218,8 +232,8 @@ toL a = (a,())
 
 ---
 
-# Semiring?
-En semiring er en algebraisk struktur som oppfyller følgende
+# Semiring? Hva mangler?
+En semiring er en algebraisk struktur (+,*,0,1)som oppfyller følgende
 * \+ : Addisjon
   * Assosiativ : (a+b) + c = a + (b+c) 
   * Identitetselement : a+0 = 0 = 0+a
@@ -232,18 +246,16 @@ En semiring er en algebraisk struktur som oppfyller følgende
   * a * (b + c) = (a * b) + (a * c)
   * (a + b) * c = (a * c) + (b * c)
 
-Hva mangler vi?
-
 ---
 
-# Semiring!
+# One semiring to bind them
 
 * Absorberingselement : a * 0 = 0 = 0 * a
 
 ```haskell
 (Void,a) ~= Void
 
-toL (v,_) = a
+toL (v,_) = v
 toR v = absurd v
 ```
 * Distribusjon : a * (b + c) = (a * b) + (a * c)
@@ -260,8 +272,7 @@ toR (Right (a,c)) = (a, Right c)
 
 ---
 
-# Funksjoner
-* Hva med funksjoner?
+# Hva med funksjoner?
 * Hva blir kardinaliteten for
 
 ```haskell
@@ -270,6 +281,8 @@ Bool -> ()
 Bool -> Bool
 Maybe Bool -> Bool
 ```
+* Altså hvor mange forskjellige mappinger fra
+  a til b kan man lage
 
 ---
 
@@ -287,6 +300,21 @@ Maybe Bool -> Bool -- 8
 ---
 
 # Potensregler
+  $$ a^b * a^c = a^{b+c} $$
+
+```haskell
+(b -> a, c -> a) ~= Either b c -> a
+```
+
+$$ a^0 = 1 $$
+```haskell
+Void -> a ~= ()
+
+toR _ = ()
+toL () = \v -> absurd v
+```
+---
+# Potensregler - har sammenheng med currying?
 
 $$a^{b*c} = (a^b)^c$$
 
@@ -301,25 +329,8 @@ toL c2b2a = \(c,b) -> c2b2a c b
 
 * Lligger i standardlib :
 ```haskell
-curry   :: ((c,b)  -> a) -> (c -> b -> a)
+curry   :: ((c,b)  -> a) -> (c -> (b -> a))
 uncurry :: (c -> b -> a) -> ((c,b)  -> a)
-```
-
----
-
-# Potensregler
-  $$ a^b * a^c = a^{b+c} $$
-
-```haskell
-(b -> a, c -> a) ~= Either b c -> a
-```
-
-$$ a^0 = 1 $$
-```haskell
-Void -> a ~= ()
-
-toR _ = ()
-toL () v = absurd v
 ```
 
 
