@@ -16,6 +16,8 @@ paginate: true
 
 # Algebraiske datatyper med fokus på algebra
 
+* Typeteori del 2
+  * Nå : tall istedenfor bevis
 * Hvorfor heter det 
   * *Algebraiske* datatyper?
   * Sumtyper?
