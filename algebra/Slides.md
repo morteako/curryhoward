@@ -332,17 +332,17 @@ toL = uncurry
 ```haskell
 data Melk = Hel | Lett | Skummet
 -- Vi vil forenkle :
-(Melk,Melk,Bool -> Melk)
+(Melk,Bool -> Melk)
 --
-3*3 * 3^2 = 3^3
+3* 3^2 = 3^3
 --
 Melk -> Melk
 🐄->🐄
 🥛 -> 🥛
 
 -- eller
-(Melk,Melk,Melk,Melk)
-(🥛,🥛,🥛,🥛)
+(Melk,Melk,Melk)
+(🥛,🥛,🥛)
 ```
 ---
 # Forenkle datatyper 2
